@@ -153,4 +153,4 @@ if __name__ == "__main__":
                 print(f"\tName: {canal['name']}")
                 print(f"\tImage: {canal['image']}")
     else:
-        print(f"No se encontró la subregion '{subregion}' en la región de argentina.")
+        print(f"No se encontró la subregion '{subregion}' en la región de argentina")
