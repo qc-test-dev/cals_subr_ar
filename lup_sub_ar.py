@@ -147,10 +147,10 @@ if __name__ == "__main__":
         # Imprimir la información de cada canal
         if canales:
             for canal in canales:
-                print(f"Category: ")
+                print(f"Channel: ")
                 print(f"\tNumber: {canal['number']}")
                 print(f"\tName: {canal['name']}")
                 print(f"\tImage: {canal['image']}")
     else:
-        print(f"No se encontró la categoría '{subregion}' en la región de argentina.")
+        print(f"No se encontró la subregion '{subregion}' en la región de argentina.")
 
