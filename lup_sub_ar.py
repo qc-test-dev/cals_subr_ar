@@ -1,3 +1,5 @@
+#!/usr/local/bin/python3
+
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
