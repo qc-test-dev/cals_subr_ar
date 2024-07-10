@@ -8,7 +8,8 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 class EpgCategory:
-    def __init__(self, base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so, node_id):
+    def __init__(self, base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so,
+                 node_id):
         """
         Inicializa la clase EpgCategory con los parámetros de autenticación y del dispositivo.
 
@@ -92,8 +93,6 @@ class EpgCategory:
         }
         response = requests.get(url, params=params, verify=False)
         data = response.json()
-        # Agrega esta línea para imprimir la respuesta completa
-        #print("Respuesta de la API:", data)
 
         # Validar que 'response' esté en los datos y tenga las claves necesarias
         if "response" in data and isinstance(data["response"], dict):
@@ -132,7 +131,9 @@ if __name__ == "__main__":
         print("Tipo de dispositivo no reconocido. Debe ser 'OTT' o 'IPTV'.")
         exit()
 
-    epg_client = EpgCategory(base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so, node_id)
+    # Crear una instancia de EpgCategory con los parámetros correspondientes
+    epg_client = EpgCategory(base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so,
+                             node_id)
 
     # Obtener el ID del menú (epg_version) para la subregión ingresada
     menu_id = epg_client.obtener_menu_id(subregion)
@@ -153,4 +154,3 @@ if __name__ == "__main__":
                 print(f"\tImage: {canal['image']}")
     else:
         print(f"No se encontró la subregion '{subregion}' en la región de argentina.")
-
