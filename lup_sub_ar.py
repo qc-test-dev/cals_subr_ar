@@ -72,7 +72,7 @@ class EpgCategory:
         :param subregion: Subregión para la cual se quiere obtener la lista de canales
         :return: Lista de canales y el total de canales
         """
-        url = f"{self.base_url}/lineup"
+        url = f"{self.git addbase_url}/lineup"
         params = {
             "authpn": self.authpn,
             "authpt": self.authpt,
