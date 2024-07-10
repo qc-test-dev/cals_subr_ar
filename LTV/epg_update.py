@@ -1,0 +1,56 @@
+#!/usr/bin/python3
+import requests
+from openpyxl import load_workbook
+
+
+def epg_version_update(user,password,region,url_silo,device_id,device_model,device_type,device_so,device_category,device_manufacturer,hks):
+    try:
+        serial_id='0'
+        region = region
+        usuario = user
+        password = password
+        base_url = f'https://mfwk{url_silo}-api.clarovideo.net/services/epg/version'
+
+        params = {
+            'device_id': device_id,
+            'device_category': device_category,
+            'device_model': device_model,
+            'device_type': device_type,
+            'device_so': device_so,
+            'format': 'json',
+            'device_manufacturer': device_manufacturer,
+            'authpn': 'webclient',
+            'authpt': 'tfg1h3j4k6fd7',
+            'api_version': 'v5.93',
+            'HKS': hks,
+            'region': region,
+            
+    
+        }
+
+        parametros_epg_version = [
+             'epg_version',
+
+
+        ]
+        resultados_epg_version={}
+
+# Construyendo la URL con los parámetros
+        url_epg_version= base_url + '?' + '&'.join([f'{key}={value}' for key, value in params.items()])
+        #print(url_epg_version)
+        
+        if usuario:
+            response = requests.get(url_epg_version)
+            data_login = response.json()
+            #print(data_login)
+            for k,v in data_login['response'].items():
+                
+                if k in parametros_epg_version:
+                    resultados_epg_version.update({k:v})
+
+            return resultados_epg_version
+        else:
+            return("parametros invalidos")
+    except Exception as e:
+        print('error login')
+    
