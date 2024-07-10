@@ -8,7 +8,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 class EpgCategory:
-    def __init__(self, base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so, node_id_ott , node_id_iptv):
+    def __init__(self, base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so, node_id):
         """
         Inicializa la clase EpgCategory con los parámetros de autenticación y del dispositivo.
 
@@ -20,6 +20,7 @@ class EpgCategory:
         :param device_model: Modelo del dispositivo
         :param device_type: Tipo de dispositivo
         :param device_so: Sistema operativo del dispositivo
+        :param node_id: Node ID del dispositivo
         """
         self.base_url = base_url
         self.authpn = authpn
@@ -29,8 +30,7 @@ class EpgCategory:
         self.device_model = device_model
         self.device_type = device_type
         self.device_so = device_so
-        self.node_id_ott = node_id_ott
-        self.node_id_iptv = node_id_iptv
+        self.node_id = node_id
 
     def obtener_menu_id(self, subregion):
         """
@@ -93,7 +93,7 @@ class EpgCategory:
         response = requests.get(url, params=params, verify=False)
         data = response.json()
         # Agrega esta línea para imprimir la respuesta completa
-        print("Respuesta de la API:", data)
+        #print("Respuesta de la API:", data)
 
         # Validar que 'response' esté en los datos y tenga las claves necesarias
         if "response" in data and isinstance(data["response"], dict):
@@ -116,7 +116,7 @@ if __name__ == "__main__":
         device_model = "web"
         device_type = "web"
         device_so = "Chrome"
-        node_id_ott = "19442"
+        node_id = "19442"
     elif device_type_input == "iptv":
         # Datos de autenticación y del dispositivo ZTE (IPTV)
         base_url = "https://mfwkstbzte-api.clarovideo.net/services/epg"
@@ -127,12 +127,12 @@ if __name__ == "__main__":
         device_model = "B866V2_V1_0_0"
         device_type = "ptv"
         device_so = "Android 12"
-        node_id_iptv = "19083"
+        node_id = "19083"
     else:
         print("Tipo de dispositivo no reconocido. Debe ser 'OTT' o 'IPTV'.")
         exit()
 
-    epg_client = EpgCategory(base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so , node_id_ott, node_id_ott)
+    epg_client = EpgCategory(base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so, node_id)
 
     # Obtener el ID del menú (epg_version) para la subregión ingresada
     menu_id = epg_client.obtener_menu_id(subregion)
@@ -153,3 +153,4 @@ if __name__ == "__main__":
                 print(f"\tImage: {canal['image']}")
     else:
         print(f"No se encontró la categoría '{subregion}' en la región de argentina.")
+
