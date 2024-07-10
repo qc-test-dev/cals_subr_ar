@@ -3,6 +3,7 @@
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import openpyxl
+from openpyxl.styles import PatternFill, Font, Border, Side
 import time
 
 # Deshabilitar advertencias de solicitudes inseguras
@@ -75,20 +76,35 @@ class EpgCategory:
 def write_to_excel(channels, total, file_name='epg_data.xlsx'):
     workbook = openpyxl.Workbook()
     sheet = workbook.active
+    sheet.title = "EPG Data"
 
-    sheet.append(["Number", "Name", "Image"])
+    # Definir estilos
+    header_fill = PatternFill(start_color="FFC000", end_color="FFC000", fill_type="solid")
+    header_font = Font(bold=True, color="FFFFFF")
+    border = Border(left=Side(style='thin'), right=Side(style='thin'), top=Side(style='thin'), bottom=Side(style='thin'))
+
+    # Escribir cabecera
+    headers = ["Number", "Name", "Image"]
+    for col_num, header in enumerate(headers, 1):
+        cell = sheet.cell(row=1, column=col_num)
+        cell.value = header
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.border = border
 
     total_channels = len(channels)
-    for index, channel in enumerate(channels):
-        sheet.append([channel['number'], channel['name'], channel['image']])
+    for index, channel in enumerate(channels, start=2):
+        sheet.cell(row=index, column=1, value=channel['number']).border = border
+        sheet.cell(row=index, column=2, value=channel['name']).border = border
+        sheet.cell(row=index, column=3, value=channel['image']).border = border
 
         # Calcular y mostrar el porcentaje de progreso
-        progress = (index + 1) / total_channels * 100
+        progress = (index - 1) / total_channels * 100
         print(f"Progreso: {progress:.2f}% completado", end='\r')
         time.sleep(0.01)  # Para simular tiempo de procesamiento
 
-    sheet.append([])
-    sheet.append(["Total de canales:", total])
+    sheet.cell(row=total_channels + 2, column=1, value="Total de canales:").font = Font(bold=True)
+    sheet.cell(row=total_channels + 2, column=2, value=total).border = border
 
     workbook.save(file_name)
 
@@ -133,4 +149,5 @@ if __name__ == "__main__":
             print("No se encontraron canales.")
     else:
         print(f"No se encontró la subregion '{subregion}' en la región de argentina.")
+
 
