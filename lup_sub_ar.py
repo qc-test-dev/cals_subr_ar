@@ -136,12 +136,12 @@ if __name__ == "__main__":
         print("Tipo de dispositivo no reconocido. Debe ser 'OTT' o 'IPTV'.")
         exit()
 
-    epg_client = EpgCategory(base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so, node_id)
+    EPG_client = EpgCategory(base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so, node_id)
 
-    menu_id = epg_client.obtener_menu_id(subregion)
+    menu_id = EPG_client.obtener_menu_id(subregion)
 
     if menu_id:
-        canales, total = epg_client.obtener_lineup(menu_id, subregion)
+        canales, total = EPG_client.obtener_lineup(menu_id, subregion)
         if canales:
             write_to_excel(canales, total)
             print("\nDatos guardados en epg_data.xlsx.")
