@@ -72,7 +72,7 @@ class EpgCategory:
         :param subregion: Subregión para la cual se quiere obtener la lista de canales
         :return: Lista de canales y el total de canales
         """
-        url = f"{self.git addbase_url}/lineup"
+        url = f"{self.base_url}/lineup"
         params = {
             "authpn": self.authpn,
             "authpt": self.authpt,
@@ -102,10 +102,15 @@ class EpgCategory:
 
 
 if __name__ == "__main__":
-    device_type_input = input("Ingrese el tipo de dispositivo (OTT o IPTV): ").strip().lower()
+    device_type_input = input("Android Mobile : ADR M \n"
+                              "iOS Mobile : IOS M \n"
+                              "WEB : WEB \n"
+                              "Claro TV TATA o IPTV/AOSP : Iptv \n"
+                              "Roku : Rk \n"
+                              "Ingrese el dispositivo a consultar: ").strip().lower()
     subregion = input("Ingrese la subregion: ").strip()
 
-    if device_type_input == "ott":
+    if device_type_input == "web":
         # Datos de autenticación y del dispositivo Web (OTT)
         base_url = "https://mfwkweb-api.clarovideo.net/services/epg"
         authpn = "webclient"
@@ -116,6 +121,7 @@ if __name__ == "__main__":
         device_type = "web"
         device_so = "Chrome"
         node_id = "19442"
+
     elif device_type_input == "iptv":
         # Datos de autenticación y del dispositivo ZTE (IPTV)
         base_url = "https://mfwkstbzte-api.clarovideo.net/services/epg"
@@ -127,8 +133,42 @@ if __name__ == "__main__":
         device_type = "ptv"
         device_so = "Android 12"
         node_id = "19083"
+
+    elif device_type_input == "adr m":
+        base_url = "https://mfwkmobileandroid-api.clarovideo.net/services/epg"
+        authpn = "amco"
+        authpt = "12e4i8l6a581a"
+        device_id = "50e940ca-9ffa-4e91-a184-a4878e41238e"
+        device_category = "mobile"
+        device_model = "android"
+        device_type = "SM-G970F"
+        device_so = "Android 2013"
+        node_id = "19442"
+
+    elif device_type_input == "ios m":
+        base_url = "https://mfwkmobileios-api.clarovideo.net/services/epg"
+        authpn = "amco"
+        authpt = "12e4i8l6a581a"
+        device_id = "467C066A-F668-41A8-AC58-404B122EA991"
+        device_category = "mobile"
+        device_model = "aapl"
+        device_type = "iPhone"
+        device_so = "iOS 2015.0"
+        node_id = "19442"
+
+    elif device_type_input == "rk":
+        base_url = "https://mfwkstbroku-api.clarovideo.net/services/epg"
+        authpn = "roku"
+        authpt = "IdbIIWeFzYdy"
+        device_id = "f7785395-3dc0-5ca4-b2bd-b4e6346221e3"
+        device_category = "stb"
+        device_model = "generic"
+        device_type = "generic"
+        device_so = ""
+        node_id = "19442"
+
     else:
-        print("Tipo de dispositivo no reconocido. Debe ser 'OTT' o 'IPTV'.")
+        print("Tipo de dispositivo no reconocido. Verifique que sea ingresado correctamente.")
         exit()
 
     # Crear una instancia de EpgCategory con los parámetros correspondientes
@@ -152,5 +192,6 @@ if __name__ == "__main__":
                 print(f"\tNumber: {canal['number']}")
                 print(f"\tName: {canal['name']}")
                 print(f"\tImage: {canal['image']}")
+        print(f"\nTotal de canales: {total}")
     else:
         print(f"No se encontró la subregion '{subregion}' en la región de argentina.")
