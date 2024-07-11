@@ -1,10 +1,17 @@
 #!/usr/local/bin/python3
+'''
 
+La rama aj_main solo trabaja el dispo IPTV y OTT
+Imprime los reultados en downloads
+
+'''
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import openpyxl
 from openpyxl.styles import PatternFill, Font, Border, Side
+import os
 import time
+import sys
 
 # Deshabilitar advertencias de solicitudes inseguras
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
@@ -100,13 +107,18 @@ def write_to_excel(channels, total, file_name='epg_data.xlsx'):
 
         # Calcular y mostrar el porcentaje de progreso
         progress = (index - 1) / total_channels * 100
-        print(f"Progreso: {progress:.2f}% completado", end='\r')
+        sys.stdout.write(f"\rProgreso: {progress:.2f}% completado")
+        sys.stdout.flush()
         time.sleep(0.01)  # Para simular tiempo de procesamiento
 
     sheet.cell(row=total_channels + 2, column=1, value="Total de canales:").font = Font(bold=True)
     sheet.cell(row=total_channels + 2, column=2, value=total).border = border
 
-    workbook.save(file_name)
+    # Guardar el archivo en la carpeta de descargas
+    downloads_folder = os.path.expanduser("~/Downloads")
+    file_path = os.path.join(downloads_folder, file_name)
+    workbook.save(file_path)
+    print(f"\nArchivo guardado en {file_path}")
 
 if __name__ == "__main__":
     device_type_input = input("Ingrese el tipo de dispositivo (OTT o IPTV): ").strip().lower()
@@ -136,15 +148,17 @@ if __name__ == "__main__":
         print("Tipo de dispositivo no reconocido. Debe ser 'OTT' o 'IPTV'.")
         exit()
 
-    epg_client = EpgCategory(base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so, node_id)
+    EPG_client = EpgCategory(base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so, node_id)
 
-    menu_id = epg_client.obtener_menu_id(subregion)
+    menu_id = EPG_client.obtener_menu_id(subregion)
 
     if menu_id:
-        canales, total = epg_client.obtener_lineup(menu_id, subregion)
+        canales, total = EPG_client.obtener_lineup(menu_id, subregion)
         if canales:
-            write_to_excel(canales, total)
-            print("\nDatos guardados en epg_data.xlsx.")
+            # Construir el nombre del archivo
+            file_name = f"{device_type_input}_epg_data_{subregion}.xlsx"
+            write_to_excel(canales, total, file_name)
+            print(f"\nDatos guardados en {file_name}.")
         else:
             print("No se encontraron canales.")
     else:
