@@ -1,5 +1,16 @@
 #!/usr/local/bin/python3
+'''
+Esta es la rama principal del script
+Imprime los resultados en un excel y maneja los dispo:
 
+       Android Mobile : ADR M \n"
+       iOS Mobile : IOS M \n"
+       WEB : WEB \n"
+       Claro TV TATA o IPTV/AOSP : Iptv \n"
+       Roku : Rk \n"
+
+
+'''
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 import openpyxl
