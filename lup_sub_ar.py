@@ -109,10 +109,17 @@ def write_to_excel(channels, total, file_name='epg_data.xlsx'):
     workbook.save(file_name)
 
 if __name__ == "__main__":
-    device_type_input = input("Ingrese el tipo de dispositivo (OTT o IPTV): ").strip().lower()
+    device_type_input = input("Android Mobile : ADR M \n"
+                              "iOS Mobile : IOS M \n"
+                              "WEB : WEB \n"
+                              "Claro TV TATA o IPTV/AOSP : Iptv \n"
+                              "Roku : Rk \n"
+                              "Ingrese el dispositivo a consultar: ").strip().lower()
     subregion = input("Ingrese la subregion: ").strip()
 
-    if device_type_input == "ott":
+
+    if device_type_input == "web":
+        # Datos de autenticación y del dispositivo Web (OTT)
         base_url = "https://mfwkweb-api.clarovideo.net/services/epg"
         authpn = "webclient"
         authpt = "tfg1h3j4k6fd7"
@@ -122,6 +129,7 @@ if __name__ == "__main__":
         device_type = "web"
         device_so = "Chrome"
         node_id = "19442"
+
     elif device_type_input == "iptv":
         base_url = "https://mfwkstbzte-api.clarovideo.net/services/epg"
         authpn = "tataelxsi"
@@ -132,8 +140,42 @@ if __name__ == "__main__":
         device_type = "ptv"
         device_so = "Android 12"
         node_id = "19083"
+
+    elif device_type_input == "adr m":
+        base_url = "https://mfwkmobileandroid-api.clarovideo.net/services/epg"
+        authpn = "amco"
+        authpt = "12e4i8l6a581a"
+        device_id = "50e940ca-9ffa-4e91-a184-a4878e41238e"
+        device_category = "mobile"
+        device_model = "android"
+        device_type = "SM-G970F"
+        device_so = "Android 2013"
+        node_id = "19442"
+
+    elif device_type_input == "ios m":
+        base_url = "https://mfwkmobileios-api.clarovideo.net/services/epg"
+        authpn = "amco"
+        authpt = "12e4i8l6a581a"
+        device_id = "467C066A-F668-41A8-AC58-404B122EA991"
+        device_category = "mobile"
+        device_model = "aapl"
+        device_type = "iPhone"
+        device_so = "iOS 2015.0"
+        node_id = "19442"
+
+    elif device_type_input == "rk":
+        base_url = "https://mfwkstbroku-api.clarovideo.net/services/epg"
+        authpn = "roku"
+        authpt = "IdbIIWeFzYdy"
+        device_id = "f7785395-3dc0-5ca4-b2bd-b4e6346221e3"
+        device_category = "stb"
+        device_model = "generic"
+        device_type = "generic"
+        device_so = ""
+        node_id = "19442"
+
     else:
-        print("Tipo de dispositivo no reconocido. Debe ser 'OTT' o 'IPTV'.")
+        print("Tipo de dispositivo no reconocido. Verifique que sea ingresado correctamente.")
         exit()
 
     EPG_client = EpgCategory(base_url, authpn, authpt, device_id, device_category, device_model, device_type, device_so, node_id)
@@ -143,10 +185,19 @@ if __name__ == "__main__":
     if menu_id:
         canales, total = EPG_client.obtener_lineup(menu_id, subregion)
         if canales:
+
             write_to_excel(canales, total)
             print("\nDatos guardados en epg_data.xlsx.")
         else:
             print("No se encontraron canales.")
+
+            for canal in canales:
+                print(f"Channel: ")
+                print(f"\tNumber: {canal['number']}")
+                print(f"\tName: {canal['name']}")
+                print(f"\tImage: {canal['image']}")
+        print(f"\nTotal de canales: {total}")
+
     else:
         print(f"No se encontró la subregion '{subregion}' en la región de argentina.")
 
