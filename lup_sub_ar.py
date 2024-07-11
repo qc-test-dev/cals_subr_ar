@@ -1,5 +1,14 @@
 #!/usr/local/bin/python3
+'''
+En esta rama se imprimen los resultados en la terminal  y se tienen los dispos:
 
+                            Android Mobile : ADR M \n"
+                              "iOS Mobile : IOS M \n"
+                              "WEB : WEB \n"
+                              "Claro TV TATA o IPTV/AOSP : Iptv \n"
+                              "Roku : Rk \n"
+No guarda info en excel
+'''
 import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 
